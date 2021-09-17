@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "task-list-react-native",
+    "slug": "task-list-react-native",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "task-list-react-native"
+}
