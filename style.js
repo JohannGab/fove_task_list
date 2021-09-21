@@ -71,5 +71,10 @@ export const style = StyleSheet.create({
         borderRadius: 20,
         paddingLeft: 10,
         paddingRight: 10,
+    },
+    containerModal: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
     }
 });

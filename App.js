@@ -5,16 +5,10 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
-  Modal,
-  TouchableHighlight,
-  TextInput,
   Vibration
 } from 'react-native';
 import Header from './components/header/index';
 import TaskList from './components/task-list';
-// import MenuTask from './components/menu-task';
-// import TextPrompt from './components/text-prompt';
-// import ButtonAddTask from './components/button-add-task';
 import { TASK } from './components/model';
 import { style } from './style'
 import ModalTask from './components/modal/ModalTask';
@@ -27,45 +21,6 @@ export default function App() {
   const [updateTaskVisible, setUpdateTaskVisible] = useState(false)
   const [idGenerator, setIdGenerator] = useState(0)
   const [modalVisible, setModalVisible] = useState(false)
-
-  //   useEffect(() => {
-  //     LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
-  // }, [])
-
-  // useEffect(() => {
-  //   AsyncStorage.getItem(storageKey).then(storedTaskList => {
-  //     if (storedTaskList) {
-  //       this.setState({ taskList: JSON.parse(storedTaskList) }, () => {
-  //         if (this.state.taskList >= 1 ) { // if 0 list corrects the error problem
-  //         this.setState({
-  //           idGenerator: this.state.taskList[this.state.taskList.length - 1]
-  //             .id + 1
-  //           })
-  //         }
-  //       });
-  //     }
-  //   });
-  // },[storageKey])
-  // const valueStorageKey = AsyncStorage.getItem(storageKey)
-  // useEffect(() => {
-
-  // const getData = async () => {
-  //   try {
-  //     const value = await AsyncStorage.getItem('@storage_Key')
-  //     if(value !== null) {
-  //       // value previously stored
-  //     }
-  //   } catch(e) {
-  //     // error reading value
-  //   }
-  // }
-  //     if (valueStorageKey) {
-  //       setTaskList(JSON.parse(valueStorageKey))
-  //         if (taskList >= 1 ) { // if 0 list corrects the error problem
-  //           setIdGenerator(taskList[taskList.length - 1].id + 1)
-  //         }
-  //     }
-  // },[valueStorageKey])
 
   const deleteCurrentTask = (value) => {
     const deleteTask = taskList?.filter(res => res.id !== value.id)
@@ -113,10 +68,6 @@ export default function App() {
     setUpdateTaskVisible(true)
     setModalVisible(true)
   }
-
-  // const saveTaskList = () => {
-  //   AsyncStorage.setItem(storageKey, JSON.stringify(taskList));
-  // }
 
   const renderTaskList = () => {
     if (taskList !== undefined) {

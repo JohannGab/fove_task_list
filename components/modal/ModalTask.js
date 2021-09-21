@@ -2,12 +2,9 @@ import React from 'react';
 import {
     Text,
     View,
-    ScrollView,
-    TouchableOpacity,
     Modal,
     TouchableHighlight,
-    TextInput,
-    Vibration
+    TextInput
 } from 'react-native';
 import { style } from '../../style'
 
@@ -34,7 +31,7 @@ const ModalTask = ({
         setUpdateTaskVisible(false)
     }
     return (
-        <View>
+        <View style={style.containerModal}>
             <Modal
                 animationType="slide"
                 transparent={true}
