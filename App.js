@@ -12,6 +12,7 @@ import TaskList from './components/task-list';
 import { TASK } from './components/model';
 import { style } from './style'
 import ModalTask from './components/modal/ModalTask';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
 
@@ -19,12 +20,40 @@ export default function App() {
   const [addList, setAddList] = useState(undefined)
   const [valueSelector, setValueSelector] = useState(undefined)
   const [updateTaskVisible, setUpdateTaskVisible] = useState(false)
-  const [idGenerator, setIdGenerator] = useState(0)
   const [modalVisible, setModalVisible] = useState(false)
+
+  const storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value)
+      await AsyncStorage.setItem('@storage_Key', jsonValue)
+    } catch (e) {
+      // saving error
+    }
+  }
+
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@storage_Key')
+      if (jsonValue !== null) {
+        // value previously stored
+        jsonValue.length > 2 && setTaskList(JSON.parse(jsonValue))
+      }
+
+    } catch (e) {
+      // error reading value
+    }
+  }
+
+  useEffect(() => {
+    if (taskList === undefined) {
+      getData()
+    }
+  }, [taskList])
 
   const deleteCurrentTask = (value) => {
     const deleteTask = taskList?.filter(res => res.id !== value.id)
     setTaskList(deleteTask)
+    storeData(deleteTask)
     Vibration.vibrate()
   }
 
@@ -37,28 +66,30 @@ export default function App() {
       status: changeStatus
     }
     setTaskList([...updatedTask])
+    storeData([...updatedTask])
   };
 
   const onAddTask = value => {
     const newTask = {
-      id: idGenerator,
+      id: new Date().getTime(),
       content: value,
       status: TASK.todoStatus
     };
     setTaskList(taskList ? [...taskList, newTask] : [newTask])
-    setIdGenerator(idGenerator + 1)
+    storeData(taskList ? [...taskList, newTask] : [newTask])
     Vibration.vibrate()
     setAddList(undefined)
   };
 
   const updatedTaskContent = (value) => {
     let updatedTask = taskList
-    updatedTask[valueSelector.data.id] = {
+    updatedTask[valueSelector.index] = {
       id: valueSelector.data.id,
       content: value,
       status: valueSelector.data.status,
     }
     setTaskList([...updatedTask])
+    storeData([...updatedTask])
     setValueSelector(undefined)
   }
 
@@ -70,7 +101,7 @@ export default function App() {
   }
 
   const renderTaskList = () => {
-    if (taskList !== undefined) {
+    if (taskList !== undefined && taskList?.length > 0) {
       return (
         <TaskList
           onLongPressCallBack={diplayRenameTask}
@@ -89,7 +120,7 @@ export default function App() {
       <ScrollView>
         <View
           style={
-            taskList ? style.noTask : { alignItems: "center", marginTop: 20 }
+            taskList !== undefined && taskList?.length > 0 ? style.noTask : { alignItems: "center", marginTop: 20 }
           }
         >
           {renderTaskList()}
